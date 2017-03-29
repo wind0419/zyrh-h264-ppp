@@ -85,7 +85,7 @@ ppp_generic_setup() {
 	local config="$1"; shift
 	local localip
 
-	json_get_vars ipv6 demand keepalive keepalive_adaptive username password pppd_options pppname unnumbered
+	json_get_vars ipv6 demand keepalive keepalive_adaptive pppd_options pppname unnumbered
 	if [ "$ipv6" = 0 ]; then
 		ipv6=""
 	elif [ -z "$ipv6" -o "$ipv6" = auto ]; then
@@ -130,7 +130,6 @@ ppp_generic_setup() {
 		nodefaultroute \
 		usepeerdns \
 		$demand maxfail 1 \
-		${username:+user "$username" password "$password"} \
 		${connect:+connect "$connect"} \
 		${disconnect:+disconnect "$disconnect"} \
 		ip-up-script /lib/netifd/ppp-up \

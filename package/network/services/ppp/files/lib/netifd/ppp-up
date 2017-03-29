@@ -2,6 +2,10 @@
 PPP_IPPARAM="$6"
 
 . /lib/netifd/netifd-proto.sh
+
+echo -n > /tmp/dialcount
+touch /tmp/dialok
+
 proto_init_update "$IFNAME" 1 1
 proto_set_keep 1
 [ -n "$PPP_IPPARAM" ] && {

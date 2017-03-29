@@ -6,14 +6,8 @@ opengt
  flash 0.1
 
 :start
- send "ATI^m"
- get 1 "" $s
- print $s
-
- waitquiet 1 0.2
- send "AT+LCTSW^m"
- get 1 "" $s
- print $s
-
-:continue
+ print "Trying to set AGPS\n"
+ send "at+gpsstart^m"
+ send "at+gpsconfig=20,180,9999999,1,2^m"
+ print "OK\n"
  exit 0

@@ -20,6 +20,22 @@ set network.globals.ula_prefix='auto'
 EOF
 }
 
+generate_ppp_network_dev() {
+	uci -q batch <<EOF
+delete network.ppp
+set network.ppp='interface'
+set network.ppp.proto='3g'
+set network.ppp.service='ulong2'
+set network.ppp.apn='CTNET'
+set network.ppp.dialnumber='*99***1#'
+set network.ppp.device='/dev/ttyUSB1'
+set network.ppp.at_port='/dev/ttyUSB2'
+set network.ppp.username=''
+set network.ppp.password=''
+set network.ppp.private_dial='0'
+EOF
+}
+
 next_vlan=3
 generate_network() {
 	local vlan
@@ -157,6 +173,7 @@ json_init
 json_load "$(cat ${CFG})"
 
 generate_static_network
+generate_ppp_network_dev
 
 json_get_keys keys network
 for key in $keys; do generate_network $key; done
