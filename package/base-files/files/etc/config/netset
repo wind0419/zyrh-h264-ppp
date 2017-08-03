@@ -1,0 +1,5 @@
+config netset
+	option remote_ip '122.227.179.90'
+	option remote_port '23509'
+	option deviceid ''
+

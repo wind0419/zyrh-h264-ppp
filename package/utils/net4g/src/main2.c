@@ -584,7 +584,7 @@ void* handle_agps(int *arg)
 				*p = ',';
 				p++;
 				*p = '\0';
- 				printf("[%d][%s]\n",++count,one_line);
+ 				//printf("[%d][%s]\n",++count,one_line);
 				parse_var(one_line,"/tmp/agps_info"); 
 				//the all gps info,can not sleep here
 			}
