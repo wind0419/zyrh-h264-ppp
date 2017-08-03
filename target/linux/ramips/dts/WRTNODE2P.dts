@@ -13,7 +13,7 @@
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "i2c", "gpio", "i2s", "refclk", "perst", "spis", "sdmode";
+				ralink,group = "i2c", "gpio", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
 				ralink,function = "gpio";
 			};
 			wled_an {
@@ -88,6 +88,18 @@
 		modpwr {
 			label = "modpwr";
 			gpios = <&gpio0 4 1>;
+		};
+		modrst {
+			label = "modrst";
+			gpios = <&gpio1 4 1>;
+		};
+		heart {
+			label = "heart";
+			gpios = <&gpio1 5 1>;
+		};
+		mcupwr {
+			label = "mcupwr";
+			gpios = <&gpio1 6 1>;
 		};
 		regstat {
 			label = "regstat";
