@@ -221,7 +221,7 @@ int init_connect(const char *ip_addr, int port, int keepalive)
         }
     }
     
-    fcntl(cli_fd,F_SETFL,flags & ~O_NONBLOCK);
+    //fcntl(cli_fd,F_SETFL,flags & ~O_NONBLOCK);
 #else
 	//def connect timeout 75s
 	if(connect(cli_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {

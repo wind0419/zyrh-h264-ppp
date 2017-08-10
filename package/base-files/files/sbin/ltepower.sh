@@ -4,11 +4,11 @@ resetmodule()
 {
 	echo Init > /tmp/sim-info
     echo 0 > /tmp/sig
-    echo 0 > /sys/class/leds/modpwr/brightness
+    echo 1 > /sys/class/leds/modrst/brightness
 	echo "$(date)-repower-4g-module" >> /tmp/repower-4g-module
 	echo "$(date)-repower-4g-module" >> /tmp/at_failed_ret
-    sleep 10
-    echo 1 > /sys/class/leds/modpwr/brightness
+    sleep 5
+    echo 0 > /sys/class/leds/modrst/brightness
 }
 
 checkat()
@@ -35,7 +35,7 @@ checkat()
 		echo Ready > /tmp/sim-info
 		[ ! -e "/tmp/sim_ready" ] && touch /tmp/sim_ready
 	else
-		logger -t ltecheck "SIM-error and ppp failed"
+		logger -t ltecheck "Check:SIM-error and ppp failed"
 		echo "$(date)-SIM-error and ppp dial failed" >> /tmp/at_failed_ret
 		cat /tmp/module_status_file >> /tmp/at_failed_ret
 		rm -f /tmp/dialok

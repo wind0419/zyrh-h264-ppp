@@ -4,10 +4,12 @@
 logger "rc.local runing,Set Watchdog in net4g"
 
 echo none > /sys/class/leds/heart/trigger
+#off status led
+echo 1 > /sys/class/leds/regstat/brightness
 
 #rmmod usbserial
 logger "Power ON 4G module"
-#echo 1 > /sys/class/leds/modpwr/brightness
+#echo 0 > /sys/class/leds/modpwr/brightness
 #sleep 5
 #insmod usbserial vendor=0x1c9e product=0x9b05
 
@@ -18,9 +20,12 @@ echo -n > /tmp/pub_info
 echo -n > /tmp/at_failed_ret
 echo -n > /tmp/module_status_file
 
+
+
 #off led gpio2
 #echo 1 >  /sys/class/leds/hame:red:gpiotwo/brightness
 echo 0 > /tmp/sig
+
 # set hostname static
 #uci set system.@system[0].hostname='OpenwrtByWind'
 #uci commit
@@ -43,6 +48,6 @@ echo "height=" >> /tmp/gps_info
 
 cp /tmp/gps_info /tmp/agps_info
 
-#for bb 8.x version
+#for 7688 2p git-proj version
 exit 0
 

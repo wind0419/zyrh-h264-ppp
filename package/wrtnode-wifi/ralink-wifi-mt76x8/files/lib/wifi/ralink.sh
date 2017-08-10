@@ -635,19 +635,20 @@ config wifi-device  ra${i}
 	option channel  auto
 	option txpower 100
 	option ht 	20
-	option country US
+	option country CN
 	
 # REMOVE THIS LINE TO ENABLE WIFI:
-	option disabled 0	
+	option disabled 1	
 	
 config wifi-iface
 	option device   ra${i}
 	option network	lan
 	option mode     ap
+	option hidden '1'
 	option ssid     WRTnode${name}_${i#0}$(cat /sys/class/net/eth0/address|awk -F ":" '{print $5""$6 }'| tr a-z A-Z)
 	option encryption psk2
 	option key 12345678
-	option ApCliEnable '1'
+	option ApCliEnable '0'
 	option ApCliSsid 'aAP'
 	option ApCliAuthMode 'WPA2PSK'
 	option ApCliEncrypType 'AES'
