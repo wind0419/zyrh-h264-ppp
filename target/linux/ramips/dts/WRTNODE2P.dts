@@ -16,6 +16,22 @@
 				ralink,group = "i2c", "gpio", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
 				ralink,function = "gpio";
 			};
+			ephy_p1 {
+				ralink,group = "ephy_p1";
+				ralink,function = "gpio";
+			};
+			ephy_p2 {
+				ralink,group = "ephy_p2";
+				ralink,function = "gpio";
+			};
+			ephy_p3 {
+				ralink,group = "ephy_p3";
+				ralink,function = "gpio";
+			};
+			ephy_p4 {
+				ralink,group = "ephy_p4";
+				ralink,function = "gpio";
+			};
 			wled_an {
 				ralink,group = "wled_an";
 				ralink,function = "wled_an";
@@ -101,6 +117,10 @@
 			label = "mcupwr";
 			gpios = <&gpio1 9 1>;
 		};
+		system {
+			label = "system";
+			gpios = <&gpio1 8 1>;
+		};
 		regstat {
 			label = "regstat";
 			gpios = <&gpio0 5 1>;
@@ -113,9 +133,10 @@
 		poll-interval = <20>;
 		vcc {
 			label = "BTN_0";
-			gpios = <&gpio1 7 1>;
+			gpios = <&gpio1 7 0>;
 			linux,code = <0x100>;
 		};
 	};
 };
+
 
