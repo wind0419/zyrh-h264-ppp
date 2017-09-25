@@ -22,6 +22,7 @@
 #include <sys/time.h>
 /* for wait() */
 #include <sys/wait.h>
+#include <sys/ioctl.h>
 
 #include "net_base.h"
 #include "net_json.h"
@@ -41,6 +42,9 @@
 
 #define WAITTING_TIME	10  //s
 #define LOGIN_TIME		10   //s
+
+#define LOCKFILE "/var/run/net4g.pid"
+#define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 
 #if 1
 #include "debug.h"
@@ -64,6 +68,41 @@ static char exit_flag = 0;
 static CONFIG_ST *glb_cfg;
 static ST_UART uart_attr;
 volatile int glb_remote_socket = 0;
+
+int already_running(void)
+{
+	int		fd;
+	char	buf[16];
+
+	fd = open(LOCKFILE, O_RDWR|O_CREAT, LOCKMODE);
+	if (fd < 0) {
+		syslog(LOG_ERR, "can't open %s: %s", LOCKFILE, strerror(errno));
+		exit(1);
+	}
+	if (lockfile(fd) < 0) {
+		if (errno == EACCES || errno == EAGAIN) {
+			close(fd);
+			return(1);
+		}
+		syslog(LOG_ERR, "can't lock %s: %s", LOCKFILE, strerror(errno));
+		exit(1);
+	}
+	ftruncate(fd, 0);
+	sprintf(buf, "%ld", (long)getpid());
+	write(fd, buf, strlen(buf)+1);
+	return(0);
+}
+
+int lockfile(int fd)
+{
+	struct flock fl;
+
+	fl.l_type = F_WRLCK;
+	fl.l_start = 0;
+	fl.l_whence = SEEK_SET;
+	fl.l_len = 0;
+	return(fcntl(fd, F_SETLK, &fl));
+}
 
 //{"respcode":"success","seqnum":"99","respmsg":"4g ok"}
 char buf[] = "{\"result\":\"success\",\"errorCode\":1}";
@@ -469,20 +508,20 @@ void* handle_tty(int *arg)
 	while(!exit_flag) {
 		if(uart_attr.valid) {
 			if(fd <= 0) {
-				fd = init_com_dev("/dev/ttyS0",0,&uart_attr);
+				fd = init_com_dev("/dev/ttyS1",0,&uart_attr);
 			}
 			
 			if(fd <= 0) {
-				ERROR("Open tty error!\n");
+				ERROR("Open ttyS1 error!\n");
 				uart_attr.fd = -1;
 				sleep_seconds_intr(60);
 				continue;
 			} else {
-				NOTE("ttyS0 open success %d\n",fd);
+				NOTE("ttyS1 open success %d\n",fd);
 				memset(buffer,0,sizeof(buffer));
 				len = read(fd,buffer,sizeof(buffer)-1);
 				if(len <= 0) {
-					NOTE("ttyS0 read error! %d:%s\n",errno,strerror(errno));
+					NOTE("ttyS1 read error! %d:%s\n",errno,strerror(errno));
 					if(fd > 0) close(fd);
 					fd = -1;
 					continue;
@@ -889,7 +928,7 @@ sigchld_handler(int s)
 
 void termination_handler(int sig)
 {
-	WARN("Catch Signal %d\n",sig);
+	WARN("Catch Signal %d, Process Exit.\n",sig);
 	exit_flag = 1;
 	exit(1);
 }
@@ -1350,6 +1389,14 @@ int main(int argc,char **argv)
 		NOTE("Starting as daemon, forking to background");
 		init_daemon();
 	}
+	/*
+	 * Make sure only one copy of the daemon is running.
+	 */
+	if (already_running()) {
+		syslog(LOG_ERR, "net4g daemon already running\n");
+		exit(1);
+	}
+	
 	// close timer on gpio
 	record2file(WTD_TRIG,"none",4);
 	record2file(WTD_BRIG,"0",1);

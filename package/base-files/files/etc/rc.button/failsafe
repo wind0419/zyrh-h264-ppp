@@ -1,5 +1,5 @@
 #!/bin/sh
 
-[ "${TYPE}" = "switch" ] || echo ${BUTTON} > /tmp/failsafe_button
+[ "${TYPE}" = "switch" ] || echo ${BUTTON} > /tmp/failsafe_button_no_failsafe
 
 return 0

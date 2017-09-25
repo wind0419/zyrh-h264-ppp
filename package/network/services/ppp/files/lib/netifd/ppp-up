@@ -33,3 +33,5 @@ if [ -n "$AUTOIPV6" ]; then
 	json_close_object
 	ubus call network add_dynamic "$(json_dump)"
 fi
+
+/sbin/renew.sh

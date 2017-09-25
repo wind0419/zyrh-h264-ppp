@@ -113,8 +113,8 @@
 			label = "heart";
 			gpios = <&gpio1 5 1>;
 		};
-		mcupwr {
-			label = "mcupwr";
+		gpioctrl {
+			label = "hame:red:gpioctrl";
 			gpios = <&gpio1 9 1>;
 		};
 		system {
@@ -138,5 +138,4 @@
 		};
 	};
 };
-
 
