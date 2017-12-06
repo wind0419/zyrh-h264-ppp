@@ -11,7 +11,7 @@ UCI_OBJ	= uci_test.o
 SERVER 		 = websocket-server
 SERVER_OBJ 	 = websocket-server.o cjson.o net_json.o  net_base.o net_tb_api.o utils.o
 
-UART_CFLAGS       = $(CFLAGS) -Wall -std=gnu99
+UART_CFLAGS       = $(CFLAGS) -g -Wall -std=gnu99
 UART_LDFLAGS      = $(LDFLAGS) -lm -lpthread
 
 all: clean  $(CLIENT)
