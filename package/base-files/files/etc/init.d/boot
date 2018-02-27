@@ -43,7 +43,9 @@ boot() {
 
 	/sbin/wifi detect > /tmp/wireless.tmp
 	[ -s /tmp/wireless.tmp ] && {
-		cat /tmp/wireless.tmp >> /etc/config/wireless
+		#zyrh 7688 Has No wifi
+		#cat /tmp/wireless.tmp >> /etc/config/wireless
+		echo "Def No wifi for zyrh 7688"
 	}
 	rm -f /tmp/wireless.tmp
 

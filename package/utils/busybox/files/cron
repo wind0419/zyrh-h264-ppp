@@ -14,11 +14,12 @@ validate_cron_section() {
 start_service () {
 	[ ! -e "/etc/crontabs/root" ] && {
 		cat > /etc/crontabs/root <<"EOF"
-0 3 * * *  /usr/bin/killall -INT net4g && /sbin/reboot
+0   3 * * * /sbin/reboot
 */3 * * * * [ -e "/dev/ttyUSB2" ] && /sbin/ltepower.sh "/dev/ttyUSB2"
+*/5 * * * * /bin/pidof net4g || /bin/net4g -d
 EOF
 	}
-
+	
 	loglevel=$(uci_get "system.@system[0].cronloglevel")
 
 	[ -z "${loglevel}" ] || {

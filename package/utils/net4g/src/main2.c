@@ -1582,8 +1582,9 @@ int main(int argc,char **argv)
 		faild_login = 1;
 		if(socket > 0) close(socket);
 		socket = -1;
+		sleep_seconds_intr(25);
 		record2file(WTD_BRIG,"0",1);
-		sleep_seconds_intr(30);
+		sleep_seconds_intr(1);
 	} //end while(1)
 EXIT:
 	exit_flag = 1;

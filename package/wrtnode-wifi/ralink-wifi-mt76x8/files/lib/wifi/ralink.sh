@@ -585,12 +585,8 @@ EOF
 				#Fix bridge problem
 				[ -z `brctl show |grep $ifname` ] && {
 				brctl addif $(bridge_interface "$net_cfg") $ifname
-				}
-				
+				}	
 			}
-
-
-
 		}
 		fi;
 		
@@ -612,22 +608,24 @@ detect_ralink() {
 	local i=-1
 	cd /sys/module/
 	[ -d mt76x8 ] || return
+	
 	while grep -qs "^ *ra$((++i)):" /proc/net/dev; do
 		config_get type ra${i} type
 		[ "$type" = ralink ] && continue
 		
-	[ -f /etc/Wireless/RT2860/RT2860.dat ] || {
-	mkdir -p /etc/Wireless/RT2860/ 2>/dev/null
-	ln -s /tmp/RT2860.dat /etc/Wireless/RT2860/RT2860.dat 2>/dev/null
-	}
+		[ -f /etc/Wireless/RT2860/RT2860.dat ] || {
+			mkdir -p /etc/Wireless/RT2860/ 2>/dev/null
+			ln -s /tmp/RT2860.dat /etc/Wireless/RT2860/RT2860.dat 2>/dev/null
+		}
 	
-	mach=$(cat /proc/cpuinfo | grep machine | awk '{ print $3}')
+		mach=$(cat /proc/cpuinfo | grep machine | awk '{ print $3}')
 
-	if [ "$mach"x = "WRTnode2R"x ] ;then
-		name="2R"
-	else
-		name="2P"
-	fi
+		if [ "$mach"x = "WRTnode2R"x ] ;then
+			name="2R"
+		else
+			name="2P"
+		fi
+		
 		cat <<EOF
 config wifi-device  ra${i}
 	option type     ralink
@@ -638,14 +636,14 @@ config wifi-device  ra${i}
 	option country CN
 	
 # REMOVE THIS LINE TO ENABLE WIFI:
-	option disabled 1	
-	
+	option disabled 1
+
 config wifi-iface
 	option device   ra${i}
 	option network	lan
 	option mode     ap
-	option hidden '1'
-	option ssid     WRTnode${name}_${i#0}$(cat /sys/class/net/eth0/address|awk -F ":" '{print $5""$6 }'| tr a-z A-Z)
+	option hidden 	'0'
+	option ssid     ZYRH4G_$(cat /sys/class/net/eth0/address|awk -F ":" '{print $5""$6 }'| tr a-z A-Z)
 	option encryption psk2
 	option key 12345678
 	option ApCliEnable '0'
@@ -653,11 +651,8 @@ config wifi-iface
 	option ApCliAuthMode 'WPA2PSK'
 	option ApCliEncrypType 'AES'
 	option ApCliPassWord '87654321'
-	
 EOF
 
 	done
-	
 }
-
 

@@ -10,10 +10,11 @@ opengt
  get 1 "" $s
  print $s
 
- waitquiet 1 0.2
- send "AT+LCTSW^m"
- get 1 "" $s
- print $s
+ send "AT\^MEID^m"
+ get 1 "^m" $s
+ get 1 "^m" $s
+ print "IMEI:",$right($s,16)
+
 
 :continue
  exit 0

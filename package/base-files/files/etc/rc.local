@@ -11,7 +11,7 @@ echo 1 > /sys/class/leds/regstat/brightness
 logger "Power ON 4G module"
 #echo 0 > /sys/class/leds/modpwr/brightness
 #sleep 5
-#insmod usbserial vendor=0x1c9e product=0x9b05
+#insmod usbserial vendor=0x1c9e product=0x9b3c
 
 ls /dev/ttyUSB*
 echo -n > /tmp/3g-ret
@@ -31,9 +31,9 @@ echo 0 > /tmp/sig
 #uci commit
 
 echo "Default" > /tmp/board_info
-echo "remote_ip=$(uci get netset.@netset[0].remote_ip)" >> /tmp/board_info
-echo "remote_port=$(uci get netset.@netset[0].remote_port)" >> /tmp/board_info
-echo "deviceid=$(uci get netset.@netset[0].deviceid)" >> /tmp/board_info
+echo "remote_ip=$(uci get -q netset.@netset[0].remote_ip)" >> /tmp/board_info
+echo "remote_port=$(uci get -q netset.@netset[0].remote_port)" >> /tmp/board_info
+echo "deviceid=$(uci get -q netset.@netset[0].deviceid)" >> /tmp/board_info
 echo "mac=$(cat /sys/class/net/eth0/address)" >> /tmp/board_info
 echo "version=$(cat /etc/Version)" >> /tmp/board_info
 echo "starttime=$(date "+%Y-%m-%d %H:%M:%S")" >> /tmp/board_info

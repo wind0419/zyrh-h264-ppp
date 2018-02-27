@@ -13,6 +13,8 @@ proto_3g_init_config() {
 	no_device=1
 	available=1
 	ppp_generic_init_config
+	# vars in /etc/config/network.ppp
+	# json_load(jshn -r xx) to shell env
 	proto_config_add_string "device:device"
 	proto_config_add_string "apn"
 	proto_config_add_string "service"
@@ -48,7 +50,6 @@ proto_3g_setup() {
 		proto_set_available "$interface" 0
 		return 1
 	}
-
 	nettype="NONE"
 	# every time pppd to be called
 	case "$service" in
@@ -107,7 +108,7 @@ proto_3g_setup() {
 				logger -t ppp "unknow usb module:$cardinfo"
 				return 1
 			fi
-
+			
 			# check sim card
 			local simst=$(gcom -d "$at_port" -s /etc/gcom/checkpin.gcom)
 			echo "simcard=$simst" > /tmp/3g-info
@@ -121,6 +122,19 @@ proto_3g_setup() {
 				rm -f /tmp/sim_ready
 				return 1
 			fi
+			
+#			local netreg=$(gcom -d "$at_port" -s /etc/gcom/check_reg.gcom)
+#			if echo "$netreg" | grep -qi '0,1'; then
+#				logger -t ppp "Registered Home Network"
+#			elif echo "$netreg" | grep -qi '0,5'; then
+#				logger -t ppp "Registered Remote Network"
+#			else
+#				logger -t ppp "$netreg"
+#				# check CSQ  SIMCARD PSRAR  Creg CEREG
+#				gcom -d "$at_port" -s /etc/gcom/check_status.gcom > /tmp/at_failed_ret
+#				echo "$netreg" >> /tmp/at_failed_ret
+#				return 1
+#			fi
 			
 			local sysinfo=$(gcom -d "$at_port" -s /etc/gcom/sysinfo.gcom)
 			if echo "$sysinfo" | grep -qi 'NO,'; then
@@ -172,7 +186,7 @@ proto_3g_setup() {
 			fi
 			
 			# set searching network order
-			[ -n "$MODE" ] && gcom -d "$at_port" -s /etc/gcom/setmode.gcom
+ 			[ -n "$MODE" ] && gcom -d "$at_port" -s /etc/gcom/setmode.gcom
 			
 			# close ehrpd and psdialind
 			gcom -d "$at_port" -s /etc/gcom/ehrpdclose.gcom
@@ -181,7 +195,7 @@ proto_3g_setup() {
 			# to check CSQ & Creg & Cops & IMEI & IMSI .etc
 			if echo "$cardinfo" | grep -qi IMEI; then
 				imei=$(echo "$cardinfo" | grep -i IMEI)
-				echo "${imei:15:6}" > /tmp/devimeiid
+				[ ! -s "/tmp/devimeiid" ] && echo "${imei:15:6}" > /tmp/devimeiid
 				echo "imei=${imei#IMEI:}" >> /tmp/3g-info
 				imsi=$(gcom -d "$at_port" -s /etc/gcom/getimsi.gcom)
 				echo $imsi >> /tmp/3g-info
@@ -189,6 +203,8 @@ proto_3g_setup() {
 				echo "signal=$sig" >> /tmp/3g-info
 				echo $sig > /tmp/sig
 				echo "mac=$(cat /sys/class/net/eth0/address)" >> /tmp/3g-info
+				# off gpio2
+				echo 1 >  /sys/class/leds/hame:red:gpiotwo/brightness
 			fi
 			
 			echo "Default" > /tmp/pub_info
@@ -202,23 +218,9 @@ proto_3g_setup() {
 			echo "password=$password" >> /tmp/dialcfg
 			echo "dialnumber=$dialnumber" >> /tmp/dialcfg
 			
-			
-			#if [ -n "$pincode" ]; then
-			#	PINCODE="$pincode" gcom -d "$at_port" -s /etc/gcom/setpin.gcom || {
-			#		proto_notify_error "$interface" PIN_FAILED
-			#		proto_block_restart "$interface"
-			#		return 1
-			#	}
-			#fi
-
-			# wait for carrier to avoid firmware stability bugs
-			#[ -n "$SIERRA" ] && {
-			#	gcom -d "$at_port" -s /etc/gcom/getcarrier.gcom || return 1
-			#}
-
+			gcom -d "$at_port" -s /etc/gcom/startagps.gcom > /tmp/agps_status
 		;;
 	esac
-
 	ppp_generic_setup "$interface" \
 		noaccomp \
 		${username:+user "$username" password "$password"} \
@@ -227,8 +229,8 @@ proto_3g_setup() {
 		nobsdcomp \
 		noauth \
 		lock \
-		modem \
 		crtscts \
+		modem \
 		115200 "$device"
 	return 0
 }
@@ -238,3 +240,4 @@ proto_3g_teardown() {
 }
 
 [ -z "NOT_INCLUDED" ] || add_protocol 3g
+
