@@ -117,9 +117,12 @@ proto_3g_setup() {
 			if echo "$simst" | grep -qi Ready; then
 				# sim card ready.to dial ppp
 				[ ! -e "/tmp/sim_ready" ] && touch /tmp/sim_ready
+				# LED blink,gpio43
+				echo timer > /sys/class/leds/dialstatus/trigger
 			else
 				#SIM ready to no
 				rm -f /tmp/sim_ready
+				echo none > /sys/class/leds/dialstatus/trigger
 				return 1
 			fi
 			
@@ -203,8 +206,7 @@ proto_3g_setup() {
 				echo "signal=$sig" >> /tmp/3g-info
 				echo $sig > /tmp/sig
 				echo "mac=$(cat /sys/class/net/eth0/address)" >> /tmp/3g-info
-				# off gpio2
-				echo 1 >  /sys/class/leds/hame:red:gpiotwo/brightness
+
 			fi
 			
 			echo "Default" > /tmp/pub_info

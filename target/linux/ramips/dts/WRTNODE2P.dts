@@ -22,7 +22,7 @@
 			};
 			ephy_p2 {
 				ralink,group = "ephy_p2";
-				ralink,function = "gpio";
+				ralink,function = "ephy";
 			};
 			ephy_p3 {
 				ralink,group = "ephy_p3";
@@ -111,15 +111,19 @@
 		};
 		heart {
 			label = "heart";
-			gpios = <&gpio1 5 1>;
+			gpios = <&gpio1 7 1>;
 		};
 		gpioctrl {
 			label = "hame:red:gpioctrl";
 			gpios = <&gpio1 9 1>;
 		};
-		system {
-			label = "system";
+		gps {
+			label = "gps";
 			gpios = <&gpio1 8 1>;
+		};
+		dialstatus {
+			label = "dialstatus";
+			gpios = <&gpio1 11 1>;
 		};
 		regstat {
 			label = "regstat";
@@ -133,7 +137,7 @@
 		poll-interval = <20>;
 		vcc {
 			label = "BTN_0";
-			gpios = <&gpio1 7 0>;
+			gpios = <&gpio1 5 0>;
 			linux,code = <0x100>;
 		};
 	};

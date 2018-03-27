@@ -4,7 +4,13 @@ PPP_IPPARAM="$6"
 . /lib/netifd/netifd-proto.sh
 
 echo -n > /tmp/dialcount
+
+echo none > /sys/class/leds/regstat/trigger
 echo 0 > /sys/class/leds/regstat/brightness
+
+echo none > /sys/class/leds/dialstatus/trigger
+echo 0 > /sys/class/leds/dialstatus/brightness
+
 touch /tmp/dialok
 
 proto_init_update "$IFNAME" 1 1

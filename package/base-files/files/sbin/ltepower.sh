@@ -11,6 +11,15 @@ resetmodule()
     echo 0 > /sys/class/leds/modrst/brightness
 }
 
+off_leds()
+{
+	echo none > /sys/class/leds/regstat/trigger
+	echo 1 > /sys/class/leds/regstat/brightness
+
+	echo none > /sys/class/leds/dialstatus/trigger
+	echo 1 > /sys/class/leds/dialstatus/brightness
+}
+
 checkat()
 {
 	# other process has do at-cmd
@@ -60,6 +69,8 @@ if [ -e "/tmp/dialok" ]; then
 	echo -n > /tmp/cfuncount
 else
 	ifdown ppp
+	
+	off_leds
 	sleep 5
 	num="$(cat /tmp/cfuncount | wc -l)"
 	if [ $num -ge 3 ]; then
