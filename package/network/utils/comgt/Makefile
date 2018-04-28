@@ -68,6 +68,7 @@ define Package/comgt/install
 	$(INSTALL_DIR) $(1)/etc/chatscripts
 	$(INSTALL_DATA) ./files/3g.chat $(1)/etc/chatscripts/3g.chat
 	$(INSTALL_DATA) ./files/evdo.chat $(1)/etc/chatscripts/evdo.chat
+	$(INSTALL_DATA) ./files/ec20private.chat $(1)/etc/chatscripts/ec20private.chat
 	$(INSTALL_DIR) $(1)/etc/gcom
 	$(INSTALL_DATA) ./files/setpin.gcom $(1)/etc/gcom/setpin.gcom
 	$(INSTALL_DATA) ./files/checkpin.gcom $(1)/etc/gcom/checkpin.gcom
@@ -88,6 +89,7 @@ define Package/comgt/install
 	$(INSTALL_DATA) ./files/sysinfo.gcom $(1)/etc/gcom/sysinfo.gcom
 	$(INSTALL_DATA) ./files/ehrpdclose.gcom $(1)/etc/gcom/ehrpdclose.gcom
 	$(INSTALL_DATA) ./files/psdialindclose.gcom $(1)/etc/gcom/psdialindclose.gcom
+	$(INSTALL_DATA) ./files/ec20net.gcom $(1)/etc/gcom/ec20net.gcom
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/tty
 	$(INSTALL_DATA) ./files/3g.usb $(1)/etc/hotplug.d/tty/30-3g
 	$(INSTALL_DIR) $(1)/lib/netifd/proto

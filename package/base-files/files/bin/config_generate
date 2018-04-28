@@ -32,7 +32,11 @@ set network.ppp.device='/dev/ttyUSB1'
 set network.ppp.at_port='/dev/ttyUSB2'
 set network.ppp.username=''
 set network.ppp.password=''
+set network.ppp.u9300_gps='/dev/ttyUSB3'
 set network.ppp.private_dial='0'
+set network.ppp.ec20_atport='/dev/ttyUSB2'
+set network.ppp.ec20_device='/dev/ttyUSB3'
+set network.ppp.ec20_gps='/dev/ttyUSB1'
 EOF
 }
 
@@ -69,7 +73,7 @@ EOF
 	lan) uci -q batch <<EOF
 set network.$1.type='bridge'
 set network.$1.proto='static'
-set network.$1.ipaddr='192.168.8.1'
+set network.$1.ipaddr='192.168.1.1'
 set network.$1.netmask='255.255.255.0'
 EOF
 		;;

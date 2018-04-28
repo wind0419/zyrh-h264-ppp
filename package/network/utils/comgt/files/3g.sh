@@ -24,22 +24,32 @@ proto_3g_init_config() {
 	proto_config_add_string "password"
 	proto_config_add_string "at_port"
 	proto_config_add_string "private_dial"
+	proto_config_add_string "u9300_gps"
+	proto_config_add_string "ec20_atport"
+	proto_config_add_string "ec20_device"
+	proto_config_add_string "ec20_gps"
 }
 
 proto_3g_setup() {
 	local interface="$1"
 	local chatcfg
-
+	local modem_type="NONE"
+	
 	json_get_var device device
 	json_get_var apn apn
 	json_get_var service service
 	json_get_var pincode pincode
 	json_get_var dialnumber dialnumber
 	# add by wind
+	#for u9300
 	json_get_var username username
 	json_get_var password password
 	json_get_var at_port at_port
 	json_get_var private_dial private_dial
+	
+	#for ec20
+	json_get_var ec20_atport ec20_atport
+	json_get_var ec20_device ec20_device
 	# end
 
 	[ -z "$at_port" ] && at_port="/dev/ttyUSB2"
@@ -84,6 +94,7 @@ proto_3g_setup() {
 				esac
 				export MODE="AT^SYSCFG=${CODE},3FFFFFFF,2,4"
 			elif echo "$cardinfo" | grep -q LONGSUNG; then
+				modem_type="LONGSUNG"
 				case "$service" in
 					ulong1) CODE=1;;
 					ulong2) CODE=2;;
@@ -103,6 +114,9 @@ proto_3g_setup() {
 					*) CODE=2;;
 				esac
 				export MODE="AT+MODODREX=${CODE}"
+			elif echo "$cardinfo" | grep -q EC20; then
+				modem_type="EC20"
+				device=$ec20_device
 			else
 				#unknow USB_Module
 				logger -t ppp "unknow usb module:$cardinfo"
@@ -148,8 +162,12 @@ proto_3g_setup() {
 				return 1
 			fi
 			
+			if [ "$modem_type" = "LONGSUNG" ]; then
+				nettype=$(gcom -d "$at_port" -s /etc/gcom/nettype.gcom)
+			else
+				nettype=$(gcom -d "$at_port" -s /etc/gcom/ec20net.gcom)
+			fi
 			
-			nettype=$(gcom -d "$at_port" -s /etc/gcom/nettype.gcom)
 			if echo "$nettype" |grep -qw EVDO; then
 				username="ctnet@mycdma.cn"
 				password="vnet.mobi"
@@ -163,7 +181,7 @@ proto_3g_setup() {
 				return 1
 			else
 				if [ "$private_dial" != "1" ]; then
-					# ignore web vars
+					#ignore web vars，pubilc dial do not need user&pwd
 					username=""
 					password=""
 				fi
@@ -176,11 +194,24 @@ proto_3g_setup() {
 			connect="DIALNUMBER=$dialnumber /usr/sbin/chat -t5 -v -E -f $chatcfg"
 			
 			if [ "$private_dial" = "1" ]; then
-				chatcfg="/etc/chatscripts/3gprivate.chat"
-				#cgdcont ,3GNET CTNET $QCPDPP=1,1,"user","pwd"
-				export CGDCONT="AT+CGDCONT=1,\"IP\",\"$apn\"";
-				export USER_PWD="AT\$QCPDPP=1,1,\"$password\",\"$username\"";
-				gcom -d "$at_port" -s /etc/gcom/initfirst.gcom
+				if [ "$modem_type" = "LONGSUNG" ]; then
+					#only for 9300 private dial
+					chatcfg="/etc/chatscripts/3gprivate.chat"
+					#cgdcont ,3GNET CTNET $QCPDPP=1,1,"user","pwd"
+					export CGDCONT="AT+CGDCONT=1,\"IP\",\"$apn\"";
+					export USER_PWD="AT\$QCPDPP=1,1,\"$password\",\"$username\"";
+					gcom -d "$at_port" -s /etc/gcom/initfirst.gcom
+					
+				elif [ "$modem_type" = "EC20" ]; then
+					#only for ec20 private dial
+					chatcfg="/etc/chatscripts/ec20private.chat"
+					#QCFG="cdmaruim",1';QICSGP=1,1,"$USE_APN","$USER","$PWD"';
+					export CGDCONT="AT+QCFG=\"cdmaruim\",1";
+					export USER_PWD="AT+QICSGP=1,1,\"$apn\",\"$username\",\"$password\"";
+					#gcom -d "$at_port" -s /etc/gcom/initfirst.gcom
+					logger -t ppp "EC20 Private Dial......"
+				fi
+				
 				connect="${apn:+USE_APN=$apn} DIALNUMBER=$dialnumber USER=$username PWD=$password /usr/sbin/chat -t5 -v -E -f $chatcfg"
 			else
 				# auto setting APN
@@ -191,14 +222,17 @@ proto_3g_setup() {
 			# set searching network order
  			[ -n "$MODE" ] && gcom -d "$at_port" -s /etc/gcom/setmode.gcom
 			
-			# close ehrpd and psdialind
-			gcom -d "$at_port" -s /etc/gcom/ehrpdclose.gcom
-			gcom -d "$at_port" -s /etc/gcom/psdialindclose.gcom
+			if [ "$modem_type" = "LONGSUNG" ]; then
+				# close ehrpd and psdialind
+				logger -t ppp "LONGSUNG, to close ehprd and psdialind"
+				gcom -d "$at_port" -s /etc/gcom/ehrpdclose.gcom
+				gcom -d "$at_port" -s /etc/gcom/psdialindclose.gcom
+			fi
 			
 			# to check CSQ & Creg & Cops & IMEI & IMSI .etc
 			if echo "$cardinfo" | grep -qi IMEI; then
 				imei=$(echo "$cardinfo" | grep -i IMEI)
-				[ ! -s "/tmp/devimeiid" ] && echo "${imei:15:6}" > /tmp/devimeiid
+				[ ! -s "/tmp/devimeiid" ] && echo "${imei:14:6}" > /tmp/devimeiid
 				echo "imei=${imei#IMEI:}" >> /tmp/3g-info
 				imsi=$(gcom -d "$at_port" -s /etc/gcom/getimsi.gcom)
 				echo $imsi >> /tmp/3g-info
@@ -220,7 +254,9 @@ proto_3g_setup() {
 			echo "password=$password" >> /tmp/dialcfg
 			echo "dialnumber=$dialnumber" >> /tmp/dialcfg
 			
-			gcom -d "$at_port" -s /etc/gcom/startagps.gcom > /tmp/agps_status
+			if [ "$modem_type" = "LONGSUNG" ]; then
+				gcom -d "$at_port" -s /etc/gcom/startagps.gcom > /tmp/agps_status
+			fi
 		;;
 	esac
 	ppp_generic_setup "$interface" \

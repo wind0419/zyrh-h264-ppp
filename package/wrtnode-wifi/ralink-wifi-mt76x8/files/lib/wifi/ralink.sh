@@ -636,7 +636,7 @@ config wifi-device  ra${i}
 	option country CN
 	
 # REMOVE THIS LINE TO ENABLE WIFI:
-	option disabled 1
+	option disabled 0
 
 config wifi-iface
 	option device   ra${i}
@@ -645,7 +645,7 @@ config wifi-iface
 	option hidden 	'0'
 	option ssid     ZYRH4G_$(cat /sys/class/net/eth0/address|awk -F ":" '{print $5""$6 }'| tr a-z A-Z)
 	option encryption psk2
-	option key 12345678
+	option key zyrh3gvs.net
 	option ApCliEnable '0'
 	option ApCliSsid 'aAP'
 	option ApCliAuthMode 'WPA2PSK'

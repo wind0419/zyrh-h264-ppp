@@ -6,6 +6,8 @@
 
 logger "$BUTTON pressed for $SEEN seconds"
 
+return 0
+
 if [ "$SEEN" -lt 1 ]
 then
 	echo "REBOOT" > /dev/console

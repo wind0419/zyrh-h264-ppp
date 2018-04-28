@@ -138,8 +138,8 @@ static struct rt2880_pmx_func i2c_grp_mt7628[] = {
 	FUNC("i2c", 0, 4, 2),
 };
 
-static struct rt2880_pmx_func refclk_grp_mt7628[] = { FUNC("reclk", 0, 37, 1) };
-static struct rt2880_pmx_func perst_grp_mt7628[] = { FUNC("perst", 0, 36, 1) };
+static struct rt2880_pmx_func refclk_grp_mt7628[] = { FUNC("reclk", 0, 36, 1) };
+static struct rt2880_pmx_func perst_grp_mt7628[] = { FUNC("perst", 0, 37, 1) };
 static struct rt2880_pmx_func wdt_grp_mt7628[] = { FUNC("wdt", 0, 38, 1) };
 static struct rt2880_pmx_func spi_grp_mt7628[] = { FUNC("spi", 0, 7, 4) };
 
@@ -192,6 +192,13 @@ struct rt2880_pmx_func wled_an_grp_mt7628[] = {
         FUNC("wled_an", 0,44, 1),
 };
 
+static struct rt2880_pmx_func ephy_p0_grp_mt7628[] = {
+        FUNC("rsvd", 3, 43, 1),
+        FUNC("rsvd", 2, 43, 1),
+        FUNC("gpio", 1, 43, 1),
+        FUNC("ephy", 0, 43, 1),
+};
+
 static struct rt2880_pmx_func ephy_p1_grp_mt7628[] = {
         FUNC("rsvd", 3, 42, 1),
         FUNC("rsvd", 2, 42, 1),
@@ -221,6 +228,7 @@ static struct rt2880_pmx_func ephy_p4_grp_mt7628[] = {
 #define MT7628_GPIO_MODE_EPHY_P3        40
 #define MT7628_GPIO_MODE_EPHY_P2        38
 #define MT7628_GPIO_MODE_EPHY_P1        36
+#define MT7628_GPIO_MODE_EPHY_P0        34
 #define MT7628_GPIO_MODE_WLED_AN	32
 #define MT7628_GPIO_MODE_PWM1		30
 #define MT7628_GPIO_MODE_PWM0		28
@@ -255,6 +263,7 @@ static struct rt2880_pmx_group mt7628an_pinmux_data[] = {
 	GRP_G("spis", spis_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_SPIS),
 	GRP_G("gpio", gpio_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_GPIO),
 	GRP_G("wled_an", wled_an_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_WLED_AN),
+		GRP_G("ephy_p0", ephy_p0_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_EPHY_P0),
         GRP_G("ephy_p1", ephy_p1_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_EPHY_P1),
         GRP_G("ephy_p2", ephy_p2_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_EPHY_P2),
         GRP_G("ephy_p3", ephy_p3_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_EPHY_P3),

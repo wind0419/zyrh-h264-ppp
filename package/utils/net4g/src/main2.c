@@ -1425,12 +1425,14 @@ int main(int argc,char **argv)
 	pthread_detach(tpid);
 #endif
 
+#if 0
 	pthread_t apid = 0;
 	if(pthread_create(&apid,NULL,(void*)handle_agps,NULL) < 0 ) {
 		ERROR("create Agps thread error!\n");
 		exit(1);
 	}
 	pthread_detach(apid);
+#endif
 	
 	pthread_t ptid = 0;
 	if(pthread_create(&ptid,NULL,(void*)handle_timing_gpio,NULL) < 0 ) {

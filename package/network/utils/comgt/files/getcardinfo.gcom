@@ -10,10 +10,10 @@ opengt
  get 1 "" $s
  print $s
 
- send "AT\^MEID^m"
+ send "AT+CGSN^m"
  get 1 "^m" $s
  get 1 "^m" $s
- print "IMEI:",$right($s,16)
+ print "IMEI:",$right($s,15),"\n"
 
 
 :continue

@@ -16,13 +16,17 @@
 				ralink,group = "i2c", "gpio", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
 				ralink,function = "gpio";
 			};
+			ephy_p0 {
+				ralink,group = "ephy_p0";
+				ralink,function = "gpio";
+			};
 			ephy_p1 {
 				ralink,group = "ephy_p1";
 				ralink,function = "gpio";
 			};
 			ephy_p2 {
 				ralink,group = "ephy_p2";
-				ralink,function = "ephy";
+				ralink,function = "gpio";
 			};
 			ephy_p3 {
 				ralink,group = "ephy_p3";
@@ -135,9 +139,9 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		poll-interval = <20>;
-		vcc {
+		vccin {
 			label = "BTN_0";
-			gpios = <&gpio1 5 0>;
+			gpios = <&gpio1 6 0>;
 			linux,code = <0x100>;
 		};
 	};

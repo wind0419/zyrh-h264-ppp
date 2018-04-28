@@ -4,7 +4,7 @@
 START=80
 
 start() {
-	/bin/net4g -d
+	pidof net4g || /bin/net4g -d
 }
 
 stop() {
