@@ -91,6 +91,10 @@ MSG_KEY msg_key[MAG_VAL_MAX+1] = {
 	[MSG_TTY_WKMD] = {"workmode",MSG_TTY_WKMD},
 	[MSG_TTY_TINTER] = {"timeinterval",MSG_TTY_TINTER},
 	
+	//after 2018-4-28 add vcc
+	[MSG_INFO_OTHER] = {"other",MSG_INFO_OTHER},
+	[MSG_INFO_VCC] = {"voltage",MSG_INFO_VCC},
+	
 	[MAG_VAL_MAX] = {"null",MAG_VAL_MAX}
 };
 #else
@@ -178,6 +182,10 @@ char* create_json_board_info(const char *board_info,char *seqnum)
 	ADD_KEY(net_obj,MSG_NET_SIG);
 	ADD_KEY(net_obj,MSG_NET_TYPE);
 	
+	//add vcc
+	cJSON *vcc_obj = create_root_json_obj();
+	ADD_KEY(vcc_obj,MSG_INFO_VCC);
+	
 //	cJSON *gpio_obj = create_root_json_obj();
 //	ADD_KEY(gpio_obj,MSG_GPIO_NUM);
 //	ADD_KEY(gpio_obj,MSG_GPIO_NAME);
@@ -197,6 +205,8 @@ char* create_json_board_info(const char *board_info,char *seqnum)
 	cJSON_AddItemToObject(body_obj, msg_key[MSG_GPS].name, gps_obj);
 //	cJSON_AddItemToObject(body_obj, msg_key[MSG_AGPS].name, agps_obj);
 	cJSON_AddItemToObject(body_obj, msg_key[MSG_NET].name, net_obj);
+	cJSON_AddItemToObject(body_obj, msg_key[MSG_INFO_OTHER].name, vcc_obj);
+	
 //	cJSON_AddItemToObject(body_obj, msg_key[MSG_GPIO].name, gpio_array);
 	
 	cJSON_AddItemToObject(root, msg_key[MSG_BODY].name, body_obj);

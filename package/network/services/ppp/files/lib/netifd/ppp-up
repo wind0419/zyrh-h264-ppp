@@ -6,10 +6,10 @@ PPP_IPPARAM="$6"
 echo -n > /tmp/dialcount
 
 echo none > /sys/class/leds/regstat/trigger
-echo 0 > /sys/class/leds/regstat/brightness
+echo 1 > /sys/class/leds/regstat/brightness
 
 echo none > /sys/class/leds/dialstatus/trigger
-echo 0 > /sys/class/leds/dialstatus/brightness
+echo 1 > /sys/class/leds/dialstatus/brightness
 
 touch /tmp/dialok
 

@@ -576,25 +576,44 @@ void* handle_tty(int *arg)
 	return NULL;
 }
 
-
 void* handle_agps(int *arg)
 {
+	char ttydev[32] = {0};
+	char atcfgfile[64] = {0};
 	char one_line[512] = {0};
 	char *p = one_line;
 	char ch = 0;
 	int valid_flag = 0;
     int count = 0;
-
-	NOTE("AGPS Thread start...\n");
-	if(access("/dev/ttyUSB3",F_OK) == 0) {
-		NOTE("send GPS Start AT CMD\n");
-		system("/usr/bin/gcom -d /dev/ttyUSB2 -s /etc/gcom/startagps.gcom > /tmp/agps_status");
-	}
 	int fd = -1;
-
+	
+	NOTE("AGPS Thread start...\n");
+WAIT_TYPE:
+	read_file("/tmp/modem_type",one_line,64);
+	if(strstr(one_line,"EC20")) {
+		strcpy(ttydev,"/dev/ttyUSB1");
+		strcpy(atcfgfile,"/etc/gcom/longsangagps.gcom");
+	} else if(strstr(one_line,"LONGSUNG")) {
+		strcpy(ttydev,"/dev/ttyUSB3");
+		strcpy(atcfgfile,"/etc/gcom/ec20agps.gcom");
+	} else {
+		NOTE("AGPS Thread wait modem_type [%s]\n",one_line);
+		sleep_seconds_intr(3);
+		memset(one_line,0,sizeof(one_line));
+		goto WAIT_TYPE;
+	}
+	
+	if(access(ttydev,F_OK) == 0) {
+		NOTE("send AGPS Start AT CMD\n");
+		sprintf(one_line,"/usr/bin/gcom -d %s -s %s > /tmp/agps_status",ttydev,atcfgfile);
+		//system(one_line); // exec at 3g.sh
+	}
+	
+	NOTE("AGPS dev is %s\n",ttydev);
+	NOTE("AGPS AT cmd is %s\n",atcfgfile);
 	while(!exit_flag) {
-		if(access("/dev/ttyUSB3",F_OK) != 0) {
-			ERROR("APGS: ttyUSB3 is not exist!\n");
+		if(access(ttydev,F_OK) != 0) {
+			ERROR("APGS:DEV %s is not exist!\n",ttydev);
 			if(fd > 0) port_close(fd);
 			fd = -1;
 			sleep_seconds_intr(120);
@@ -602,8 +621,8 @@ void* handle_agps(int *arg)
 		}
 		
 		if(fd < 0) {
-			NOTE("APGS: Reopen ttyUSB3 dev\n");
-			fd = open_gps_com("/dev/ttyUSB3");
+			NOTE("APGS: Reopen GPS dev %s\n",ttydev);
+			fd = open_gps_com(ttydev);
 			if(fd < 0)
 				goto RECONN;
 		}
@@ -638,11 +657,11 @@ void* handle_agps(int *arg)
 		continue;
 	RECONN:
 		ERROR("Read AGPS Com Error!%d:%s\n",errno,strerror(errno));
-		if(fd >0) port_close(fd);
+		if(fd > 0) port_close(fd);
 		fd = -1;
 		sleep_seconds_intr(60);
 	}
-	NOTE("AGPS Thread exit!\n");
+	NOTE("AGPS Thread exit! need to close AT ?\n");
 	if(fd >0) port_close(fd);
 	system("/bin/echo AGPS_thread_EXIT > /tmp/agps_status");
 	return NULL;
@@ -771,7 +790,7 @@ int send_board_info(int socket,unsigned int seqnum)
 	system("/bin/echo signal=$(cat /tmp/sig) >> /tmp/signal");
 	system("/bin/cat /tmp/module_status_file >> /tmp/signal");
 	nvram_renew("/tmp/signal");
-	
+	nvram_renew("/tmp/vcc");
 	char *ptr = create_json_board_info("/tmp/board_file",strnum);
 	ret = sock_send(socket,ptr,strlen(ptr));
 	free(ptr);
@@ -928,8 +947,9 @@ sigchld_handler(int s)
 
 void termination_handler(int sig)
 {
-	WARN("Catch Signal %d, Process Exit.\n",sig);
+	WARN("\n-------Catch Signal %d, Main Process Exit.-------\n",sig);
 	exit_flag = 1;
+	usleep(10000);
 	exit(1);
 }
 
@@ -1425,7 +1445,7 @@ int main(int argc,char **argv)
 	pthread_detach(tpid);
 #endif
 
-#if 0
+#if 1
 	pthread_t apid = 0;
 	if(pthread_create(&apid,NULL,(void*)handle_agps,NULL) < 0 ) {
 		ERROR("create Agps thread error!\n");

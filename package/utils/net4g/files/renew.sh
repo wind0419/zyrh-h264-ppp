@@ -10,8 +10,8 @@ else
 fi
 
 echo "Default" > /tmp/board_info
-echo "remote_ip=$(uci get netset.@netset[0].remote_ip)" >> /tmp/board_info
-echo "remote_port=$(uci get netset.@netset[0].remote_port)" >> /tmp/board_info
+echo "remote_ip=$(uci get -q netset.@netset[0].remote_ip)" >> /tmp/board_info
+echo "remote_port=$(uci get -q netset.@netset[0].remote_port)" >> /tmp/board_info
 
 if [ "$cfgid" != "" -a "$cfgid" != "888888" ]; then
 	echo "deviceid=$cfgid" >> /tmp/board_info

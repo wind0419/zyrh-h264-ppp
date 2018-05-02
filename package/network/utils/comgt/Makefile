@@ -83,6 +83,9 @@ define Package/comgt/install
 	$(INSTALL_DATA) ./files/nettype.gcom $(1)/etc/gcom/nettype.gcom
 	$(INSTALL_DATA) ./files/autoinitapn.gcom $(1)/etc/gcom/autoinitapn.gcom
 	$(INSTALL_DATA) ./files/startagps.gcom $(1)/etc/gcom/startagps.gcom
+	$(INSTALL_DATA) ./files/longsangagps.gcom $(1)/etc/gcom/longsangagps.gcom
+	$(INSTALL_DATA) ./files/ec20agps.gcom $(1)/etc/gcom/ec20agps.gcom
+	$(INSTALL_DATA) ./files/ec20agpsend.gcom $(1)/etc/gcom/ec20agpsend.gcom
 	$(INSTALL_DATA) ./files/clearcfun.gcom $(1)/etc/gcom/clearcfun.gcom
 	$(INSTALL_DATA) ./files/setcfun.gcom $(1)/etc/gcom/setcfun.gcom
 	$(INSTALL_DATA) ./files/check_reg.gcom $(1)/etc/gcom/check_reg.gcom

@@ -123,6 +123,8 @@ proto_3g_setup() {
 				return 1
 			fi
 			
+			[ ! -e "/tmp/modem_type" ] && echo $modem_type > /tmp/modem_type
+			
 			# check sim card
 			local simst=$(gcom -d "$at_port" -s /etc/gcom/checkpin.gcom)
 			echo "simcard=$simst" > /tmp/3g-info
@@ -255,7 +257,9 @@ proto_3g_setup() {
 			echo "dialnumber=$dialnumber" >> /tmp/dialcfg
 			
 			if [ "$modem_type" = "LONGSUNG" ]; then
-				gcom -d "$at_port" -s /etc/gcom/startagps.gcom > /tmp/agps_status
+				gcom -d "$at_port" -s /etc/gcom/longsangagps.gcom > /tmp/agps_status
+			elif [ "$modem_type" = "EC20" ]; then
+				gcom -d "$at_port" -s /etc/gcom/ec20agps.gcom > /tmp/agps_status
 			fi
 		;;
 	esac

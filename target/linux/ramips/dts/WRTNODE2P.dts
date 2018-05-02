@@ -123,15 +123,15 @@
 		};
 		gps {
 			label = "gps";
-			gpios = <&gpio1 8 1>;
+			gpios = <&gpio1 8 0>;
 		};
 		dialstatus {
 			label = "dialstatus";
-			gpios = <&gpio1 11 1>;
+			gpios = <&gpio1 11 0>;
 		};
 		regstat {
 			label = "regstat";
-			gpios = <&gpio0 5 1>;
+			gpios = <&gpio0 5 0>;
 		};
 	};
 	gpio-keys-polled {

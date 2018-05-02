@@ -70,6 +70,9 @@ enum {
 	MSG_TTY_FLOWCT,
 	MSG_TTY_WKMD,
 	MSG_TTY_TINTER,
+	//add gcc
+	MSG_INFO_OTHER,
+	MSG_INFO_VCC,
 	//end
 	MAG_VAL_MAX
 };

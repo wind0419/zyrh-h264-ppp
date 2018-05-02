@@ -14,10 +14,10 @@ resetmodule()
 off_leds()
 {
 	echo none > /sys/class/leds/regstat/trigger
-	echo 1 > /sys/class/leds/regstat/brightness
+	echo 0 > /sys/class/leds/regstat/brightness
 
 	echo none > /sys/class/leds/dialstatus/trigger
-	echo 1 > /sys/class/leds/dialstatus/brightness
+	echo 0 > /sys/class/leds/dialstatus/brightness
 }
 
 checkat()
