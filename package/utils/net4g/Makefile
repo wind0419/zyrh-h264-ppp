@@ -41,7 +41,7 @@ endef
 
 define Package/net4g
 	$(call Package/net4g/Default)
-	DEPENDS:=+libpthread +libubox +libjson-c +liblua-cjson +liblua +USE_GLIBC:librt
+	DEPENDS:=+libpthread +libubox +libjson-c +librt +liblua-cjson +liblua +USE_GLIBC:librt
 	TITLE+= (communicate with remote server by tcp)
 endef
 
@@ -78,7 +78,11 @@ endef
 define Package/net4g/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/net4g $(1)/bin/
+	$(INSTALL_BIN) ./files/osip/bin/sip_reg $(1)/bin/
 
+	$(INSTALL_DIR) $(1)/lib
+	$(CP) ./files/osip/lib/* $(1)/lib/
+	
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) ./files/renew.sh $(1)/sbin/
 	
@@ -95,3 +99,4 @@ endef
 # line calls BuildPackage which in turn actually uses this information to
 # build a package.
 $(eval $(call BuildPackage,net4g))
+

@@ -73,12 +73,7 @@
 
 				partition@50000 {
 					label = "firmware";
-					reg = <0x50000 0x7d0000>;
-				};
-
-				partition@900000{
-					label = "firmware-backup";
-					reg = <0x820000 0x7d0000>;
+					reg = <0x50000 0xDd0000>;
 				};
 
 			};
