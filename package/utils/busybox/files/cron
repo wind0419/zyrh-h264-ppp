@@ -12,11 +12,11 @@ validate_cron_section() {
 }
 
 start_service () {
+	#0   3 * * * /sbin/reboot
+	#*/5 * * * * /bin/pidof net4g || /bin/net4g -d
 	[ ! -e "/etc/crontabs/root" ] && {
 		cat > /etc/crontabs/root <<"EOF"
-0   3 * * * /sbin/reboot
 */3 * * * * [ -e "/dev/ttyUSB2" ] && /sbin/ltepower.sh "/dev/ttyUSB2"
-*/5 * * * * /bin/pidof net4g || /bin/net4g -d
 EOF
 	}
 	

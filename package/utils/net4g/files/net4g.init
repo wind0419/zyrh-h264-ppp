@@ -4,7 +4,9 @@
 START=80
 
 start() {
-	pidof net4g || /bin/net4g -d
+	#pidof net4g || /bin/net4g -d
+	#heartbeat for stm32
+	echo timer > /sys/class/leds/heart/trigger
 }
 
 stop() {

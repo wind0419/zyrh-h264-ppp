@@ -257,9 +257,11 @@ proto_3g_setup() {
 			echo "dialnumber=$dialnumber" >> /tmp/dialcfg
 			
 			if [ "$modem_type" = "LONGSUNG" ]; then
-				gcom -d "$at_port" -s /etc/gcom/longsangagps.gcom > /tmp/agps_status
+				echo "No gps"
+				#gcom -d "$at_port" -s /etc/gcom/longsangagps.gcom > /tmp/agps_status
 			elif [ "$modem_type" = "EC20" ]; then
-				gcom -d "$at_port" -s /etc/gcom/ec20agps.gcom > /tmp/agps_status
+				echo "No gps"
+				#gcom -d "$at_port" -s /etc/gcom/ec20agps.gcom > /tmp/agps_status
 			fi
 		;;
 	esac
