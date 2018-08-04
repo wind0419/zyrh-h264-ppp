@@ -41,7 +41,8 @@ endef
 
 define Package/net4g
 	$(call Package/net4g/Default)
-	DEPENDS:=+libpthread +libubox +libjson-c +librt +liblua-cjson +liblua +USE_GLIBC:librt
+	DEPENDS:=+libpthread +libubox +libjson-c +librt +liblua-cjson +liblua +USE_GLIBC:librt \
+		+boost +boost-iostreams +boost-system +boost-thread +libxml2 
 	TITLE+= (communicate with remote server by tcp)
 endef
 
@@ -78,6 +79,7 @@ endef
 define Package/net4g/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/net4g $(1)/bin/
+	$(INSTALL_BIN) ./files/mediasvr $(1)/bin/
 	$(INSTALL_BIN) ./files/osip/bin/sip_reg $(1)/bin/
 
 	$(INSTALL_DIR) $(1)/lib
@@ -89,6 +91,7 @@ define Package/net4g/install
 	$(INSTALL_DIR) $(1)/etc/
 	$(INSTALL_DATA) ./files/decode.lua $(1)/etc/decode.lua
 	$(INSTALL_DATA) ./files/flashops.lua $(1)/etc/flashops.lua
+	$(INSTALL_DATA) ./files/pdfconfig.xml $(1)/etc/pdfconfig.xml
 	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/net4g.init $(1)/etc/init.d/net4g

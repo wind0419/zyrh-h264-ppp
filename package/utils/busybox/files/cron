@@ -16,7 +16,8 @@ start_service () {
 	#*/5 * * * * /bin/pidof net4g || /bin/net4g -d
 	[ ! -e "/etc/crontabs/root" ] && {
 		cat > /etc/crontabs/root <<"EOF"
-*/3 * * * * [ -e "/dev/ttyUSB2" ] && /sbin/ltepower.sh "/dev/ttyUSB2"
+*/3 * * * * pidof mediasvr || /bin/mediasvr &
+*/5 * * * * [ -e "/dev/ttyUSB2" ] && /sbin/ltepower.sh "/dev/ttyUSB2"
 EOF
 	}
 	

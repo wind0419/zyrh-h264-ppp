@@ -7,8 +7,11 @@ start() {
 	#pidof net4g || /bin/net4g -d
 	#heartbeat for stm32
 	echo timer > /sys/class/leds/heart/trigger
+	/bin/mediasvr &
 }
 
 stop() {
 	killall -INT net4g
+	killall -INT mediasvr
+	killall -9 mediasvr
 }
