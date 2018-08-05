@@ -650,6 +650,7 @@ static const struct option_blacklist_info telit_le922_blacklist_usbcfg3 = {
 };
 
 static const struct usb_device_id option_ids[] = {
+	{ USB_DEVICE(0x2C7C, 0x0125) }, /* Quectel EC25 */
 	{ USB_DEVICE(ZTE_VENDOR_ID, ZTE_PRODUCT_MZ382) },
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA) },
@@ -1878,6 +1879,7 @@ static struct usb_serial_driver option_1port_device = {
 #ifdef CONFIG_PM
 	.suspend           = usb_wwan_suspend,
 	.resume            = usb_wwan_resume,
+	.reset_resume      = usb_wwan_resume, //for EC25
 #endif
 };
 
