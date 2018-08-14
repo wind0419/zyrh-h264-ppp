@@ -27,5 +27,4 @@
 			<POINT   NO="130917000101000000" name = "testNode"/>
 			<CHANNEL   NO="130917000103010001" name="TestIPC" PLAYURL ="rtsp://192.168.1.64/h264/ch1/sub/av_stream"  USERNAME="admin" PASSWD="zyrh12345" PASSTYPE ="1"/>
    </SIP>
-    
 </root>

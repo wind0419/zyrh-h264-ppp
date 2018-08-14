@@ -87,6 +87,7 @@ define Package/net4g/install
 	
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) ./files/renew.sh $(1)/sbin/
+	$(INSTALL_BIN) ./files/media_resart $(1)/sbin/
 	
 	$(INSTALL_DIR) $(1)/etc/
 	$(INSTALL_DATA) ./files/decode.lua $(1)/etc/decode.lua
