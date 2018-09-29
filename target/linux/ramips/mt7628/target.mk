@@ -5,7 +5,7 @@
 SUBTARGET:=mt7628
 BOARDNAME:=WRTnode 2 series
 ARCH_PACKAGES:=ramips_24kec
-FEATURES+=usb
+FEATURES+=usb rtc
 CPU_TYPE:=24kec
 CPU_SUBTYPE:=dsp
 

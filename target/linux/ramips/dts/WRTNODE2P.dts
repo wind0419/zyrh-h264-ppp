@@ -7,13 +7,13 @@
 	model = "WRTnode2P";
 
         chosen {
-                bootargs = "console=ttyS0,57600";
+                bootargs = "console=ttyS0,115200";
         };
-
+	
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "i2c", "gpio", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
+				ralink,group = "gpio","wled_an", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
 				ralink,function = "gpio";
 			};
 			ephy_p0 {
@@ -35,10 +35,6 @@
 			ephy_p4 {
 				ralink,group = "ephy_p4";
 				ralink,function = "gpio";
-			};
-			wled_an {
-				ralink,group = "wled_an";
-				ralink,function = "wled_an";
 			};
 		};
 	};
@@ -73,26 +69,45 @@
 
 				partition@50000 {
 					label = "firmware";
-					reg = <0x50000 0xf90000>;
+					reg = <0x50000 0x7d0000>;
 				};
 
-			};
-
-			spidev@1 {
-				#address-cells = <1>;
-				#size-cells = <1>;
-				compatible = "spidev";
-				reg = <1 0>;
-				spi-max-frequency = <40000000>;
+				partition@900000{
+					label = "firmware-backup";
+					reg = <0x820000 0x7d0000>;
+				};
 			};
 		};
-
+		
+		i2c@900 {
+			status = "okay";
+			rtc@68 {
+				compatible = "dallas,ds1307";
+				 reg = <0x68>;
+			};
+		};
+		
 		uart1@d00 {
 			status = "okay";
 		};
-
 	};
-
+	
+	spi-gpio {
+		compatible = "spi-gpio";
+		#address-cells = <0x1>;
+		cs-gpios = <&gpio0 2 0>;
+		gpio-sck = <&gpio0 0 0>;
+		gpio-mosi = <&gpio0 3 0>;
+		gpio-miso = <&gpio0 1 0>;
+		num-chipselects = <1>;
+		spidev@0 {
+			#address-cells = <0x1>;
+			compatible = "spidev";
+			spi-max-frequency = <10000000>;
+			reg = <0>;
+		};
+	};
+	
 	ethernet@10100000 {
 		mtd-mac-address = <&factory 0x4>;
 		ralink,port-map = "llllw";
@@ -102,7 +117,7 @@
 		compatible = "gpio-leds";
 		modpwr {
 			label = "modpwr";
-			gpios = <&gpio0 4 1>;
+			gpios = <&gpio1 8 1>;
 		};
 		modrst {
 			label = "modrst";
@@ -116,17 +131,25 @@
 			label = "hame:red:gpioctrl";
 			gpios = <&gpio1 9 1>;
 		};
-		gps {
-			label = "gps";
-			gpios = <&gpio1 8 0>;
-		};
 		dialstatus {
 			label = "dialstatus";
 			gpios = <&gpio1 11 0>;
 		};
-		regstat {
-			label = "regstat";
-			gpios = <&gpio0 5 0>;
+		uart485 {
+			label = "uart485";
+			gpios = <&gpio1 10 0>;
+		};
+		rtcpwr {
+			label = "rtcpwr";
+			gpios = <&gpio0 6 0>;
+		};
+		rtcrst {
+			label = "rtcrst";
+			gpios = <&gpio1 12 0>;
+		};
+		wifi {
+			label = "wifi";
+			gpios = <&gpio0 11 0>;
 		};
 	};
 	gpio-keys-polled {

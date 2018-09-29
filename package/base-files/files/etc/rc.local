@@ -50,6 +50,9 @@ echo "height=" >> /tmp/gps_info
 
 cp /tmp/gps_info /tmp/agps_info
 
+#for H264 mediaserver
+echo timer > /sys/class/leds/heart/trigger
+hwclock -s
 #for 7688 2p git-proj gpio version
 exit 0
 
