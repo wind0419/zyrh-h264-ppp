@@ -85,6 +85,10 @@
 				compatible = "dallas,ds1307";
 				 reg = <0x68>;
 			};
+			rtc@51 {
+				compatible = "nxp,pcf8563";
+				 reg = <0x51>;
+			};
 		};
 		
 		uart1@d00 {
@@ -147,8 +151,8 @@
 			label = "rtcrst";
 			gpios = <&gpio1 12 0>;
 		};
-		wifi {
-			label = "wifi";
+		nesecpwr {
+			label = "nesecpwr";
 			gpios = <&gpio0 11 0>;
 		};
 	};

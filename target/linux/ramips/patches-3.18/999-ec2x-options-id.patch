@@ -1,0 +1,44 @@
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -372,8 +372,11 @@ static void option_instat_callback(struc
+ /* SpeedUp SU9800 usb 3g modem */
+ #define SPEEDUP_PRODUCT_SU9800			0x9800
+ 
+-/* LongShang  U8300W  LET modem */
+-#define LONGSHANG_PRODUCT_U8300W         0x9b05
++/* LongShang  U8300C/W  LET modem */
++#define LONGSHANG_PRODUCT_U8300CW         0x9b05
++
++/* LongShang  U9300C/W  LET modem */
++#define LONGSHANG_PRODUCT_U9300CW         0x9b3c
+ 
+ /* Haier products */
+ #define HAIER_VENDOR_ID				0x201e
+@@ -647,6 +650,7 @@ static const struct option_blacklist_inf
+ };
+ 
+ static const struct usb_device_id option_ids[] = {
++	{ USB_DEVICE(0x2C7C, 0x0125) }, /* Quectel EC25 */
+ 	{ USB_DEVICE(ZTE_VENDOR_ID, ZTE_PRODUCT_MZ382) },
+ 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
+ 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA) },
+@@ -1699,7 +1703,10 @@ static const struct usb_device_id option
+ 	{ USB_DEVICE_INTERFACE_CLASS(LONGCHEER_VENDOR_ID, SPEEDUP_PRODUCT_SU9800, 0xff) },
+ 	{ USB_DEVICE(LONGCHEER_VENDOR_ID, ZOOM_PRODUCT_4597) },
+ 	{ USB_DEVICE(LONGCHEER_VENDOR_ID, IBALL_3_5G_CONNECT) },
+-	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSHANG_PRODUCT_U8300W) },
++	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSHANG_PRODUCT_U8300CW),
++		.driver_info = (kernel_ulong_t)&net_intf4_blacklist },
++	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSHANG_PRODUCT_U9300CW),
++		.driver_info = (kernel_ulong_t)&net_intf4_blacklist },
+ 	{ USB_DEVICE(HAIER_VENDOR_ID, HAIER_PRODUCT_CE100) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(HAIER_VENDOR_ID, HAIER_PRODUCT_CE81B, 0xff, 0xff, 0xff) },
+ 	/* Pirelli  */
+@@ -1872,6 +1879,7 @@ static struct usb_serial_driver option_1
+ #ifdef CONFIG_PM
+ 	.suspend           = usb_wwan_suspend,
+ 	.resume            = usb_wwan_resume,
++	.reset_resume      = usb_wwan_resume, //for EC25
+ #endif
+ };
+ 
