@@ -1,6 +1,17 @@
---- a/arch/mips/ralink/mt7620.c
-+++ b/arch/mips/ralink/mt7620.c
-@@ -185,23 +185,50 @@ static struct rt2880_pmx_func gpio_grp_m
+--- a/arch/mips/ralink/mt7620.c	2018-09-04 17:14:33.000000000 +0800
++++ b/arch/mips/ralink/mt7620.c	2018-04-09 08:28:51.000000000 +0800
+@@ -138,8 +138,8 @@
+ 	FUNC("i2c", 0, 4, 2),
+ };
+ 
+-static struct rt2880_pmx_func refclk_grp_mt7628[] = { FUNC("reclk", 0, 36, 1) };
+-static struct rt2880_pmx_func perst_grp_mt7628[] = { FUNC("perst", 0, 37, 1) };
++static struct rt2880_pmx_func refclk_grp_mt7628[] = { FUNC("reclk", 0, 37, 1) };
++static struct rt2880_pmx_func perst_grp_mt7628[] = { FUNC("perst", 0, 36, 1) };
+ static struct rt2880_pmx_func wdt_grp_mt7628[] = { FUNC("wdt", 0, 38, 1) };
+ static struct rt2880_pmx_func spi_grp_mt7628[] = { FUNC("spi", 0, 7, 4) };
+ 
+@@ -185,23 +185,50 @@
  	FUNC("gpio", 0, 11, 1),
  };
  
@@ -14,20 +25,15 @@
 +        FUNC("rsvd", 2, 44, 1),
 +        FUNC("gpio", 1, 44, 1),
 +        FUNC("wled_an", 0,44, 1),
- };
- 
--static struct rt2880_pmx_func wled_an_grp_mt7628[] = {
--	FUNC("rsvd", 3, 44, 1),
--	FUNC("rsvd", 2, 44, 1),
--	FUNC("gpio", 1, 44, 1),
--	FUNC("wled_an", 0, 44, 1),
++};
++
 +static struct rt2880_pmx_func ephy_p0_grp_mt7628[] = {
 +        FUNC("rsvd", 3, 43, 1),
 +        FUNC("rsvd", 2, 43, 1),
 +        FUNC("gpio", 1, 43, 1),
 +        FUNC("ephy", 0, 43, 1),
- };
- 
++};
++
 +static struct rt2880_pmx_func ephy_p1_grp_mt7628[] = {
 +        FUNC("rsvd", 3, 42, 1),
 +        FUNC("rsvd", 2, 42, 1),
@@ -51,7 +57,15 @@
 +        FUNC("rsvd", 2, 39, 1),
 +        FUNC("gpio", 1, 39, 1),
 +        FUNC("ephy", 0, 39, 1),
-+};
+ };
+-
+-static struct rt2880_pmx_func wled_an_grp_mt7628[] = {
+-	FUNC("rsvd", 3, 44, 1),
+-	FUNC("rsvd", 2, 44, 1),
+-	FUNC("gpio", 1, 44, 1),
+-	FUNC("wled_an", 0, 44, 1),
+-};
+-
  #define MT7628_GPIO_MODE_MASK		0x3
 -
 -#define MT7628_GPIO_MODE_WLED_KN	48
@@ -63,7 +77,7 @@
  #define MT7628_GPIO_MODE_WLED_AN	32
  #define MT7628_GPIO_MODE_PWM1		30
  #define MT7628_GPIO_MODE_PWM0		28
-@@ -236,7 +263,12 @@ static struct rt2880_pmx_group mt7628an_
+@@ -236,7 +263,12 @@
  	GRP_G("spis", spis_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_SPIS),
  	GRP_G("gpio", gpio_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_GPIO),
  	GRP_G("wled_an", wled_an_grp_mt7628, MT7628_GPIO_MODE_MASK, 1, MT7628_GPIO_MODE_WLED_AN),
@@ -76,4 +90,5 @@
 +
  	{ 0 }
  };
+ 
  

@@ -7,13 +7,13 @@
 	model = "WRTnode2P";
 
         chosen {
-                bootargs = "console=ttyS0,115200";
+                bootargs = "console=ttyS0,57600";
         };
 	
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "gpio","wled_an", "i2s", "refclk", "perst", "spis", "wdt", "sdmode";
+				ralink,group = "gpio","wled_an", "i2s", "refclk", "perst", "wdt", "spi cs1";
 				ralink,function = "gpio";
 			};
 			ephy_p0 {
@@ -46,7 +46,7 @@
 			m25p80@0 {
 				#address-cells = <1>;
 				#size-cells = <1>;
-				compatible = "w25q256";
+				compatible = "w25q128";
 				reg = <0 0>;
 				linux,modalias = "m25p80";
 				spi-max-frequency = <10000000>;
@@ -69,22 +69,17 @@
 
 				partition@50000 {
 					label = "firmware";
-					reg = <0x50000 0x7d0000>;
+					reg = <0x50000 0x900000>;
 				};
-
-				partition@900000{
-					label = "firmware-backup";
-					reg = <0x820000 0x7d0000>;
+				partition@950000 {
+					label = "firmbak";
+					reg = <0x950000 0x6b0000>;
 				};
 			};
 		};
 		
 		i2c@900 {
 			status = "okay";
-			rtc@68 {
-				compatible = "dallas,ds1307";
-				 reg = <0x68>;
-			};
 			rtc@51 {
 				compatible = "nxp,pcf8563";
 				 reg = <0x51>;
@@ -125,11 +120,11 @@
 		};
 		modrst {
 			label = "modrst";
-			gpios = <&gpio1 4 1>;
+			gpios = <&gpio1 4 0>;
 		};
 		heart {
 			label = "heart";
-			gpios = <&gpio1 7 1>;
+			gpios = <&gpio1 6 1>;
 		};
 		gpioctrl {
 			label = "hame:red:gpioctrl";
@@ -143,14 +138,6 @@
 			label = "uart485";
 			gpios = <&gpio1 10 0>;
 		};
-		rtcpwr {
-			label = "rtcpwr";
-			gpios = <&gpio0 6 0>;
-		};
-		rtcrst {
-			label = "rtcrst";
-			gpios = <&gpio1 12 0>;
-		};
 		nesecpwr {
 			label = "nesecpwr";
 			gpios = <&gpio0 11 0>;
@@ -163,8 +150,13 @@
 		poll-interval = <20>;
 		vccin {
 			label = "BTN_0";
-			gpios = <&gpio1 6 0>;
+			gpios = <&gpio0 6 0>;
 			linux,code = <0x100>;
+		};
+		reset {
+			label = "reset";
+			gpios = <&gpio1 7 1>;
+			linux,code = <0x198>;
 		};
 	};
 };
