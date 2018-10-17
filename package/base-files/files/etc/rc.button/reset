@@ -4,16 +4,9 @@
 
 . /lib/functions.sh
 
-logger "$BUTTON pressed for $SEEN seconds"
+logger "$BUTTON pressed for $SEEN HZ(100)"
 
-return 0
-
-if [ "$SEEN" -lt 1 ]
-then
-	echo "REBOOT" > /dev/console
-	sync
-	reboot
-elif [ "$SEEN" -gt 5 ]
+if [ "$SEEN" -gt 500 ]
 then
 	echo "FACTORY RESET" > /dev/console
 	jffs2reset -y && reboot &
