@@ -1,0 +1,34 @@
+--- a/drivers/spi/spi-bitbang.c
++++ b/drivers/spi/spi-bitbang.c
+@@ -72,13 +72,21 @@ static unsigned bitbang_txrx_8(
+ 	unsigned		count = t->len;
+ 	const u8		*tx = t->tx_buf;
+ 	u8			*rx = t->rx_buf;
+-
++	
++	struct spi_bitbang	*bitbang;
++	struct spi_bitbang_cs	*cs = spi->controller_state;
++	bitbang = spi_master_get_devdata(spi->master);
++	
+ 	while (likely(count > 0)) {
+ 		u8		word = 0;
+ 
+ 		if (tx)
+ 			word = *tx++;
++		bitbang->chipselect(spi, BITBANG_CS_ACTIVE);
++		ndelay(4);
+ 		word = txrx_word(spi, ns, word, bits);
++		bitbang->chipselect(spi, BITBANG_CS_INACTIVE);
++		ndelay(4);
+ 		if (rx)
+ 			*rx++ = word;
+ 		count -= 1;
+@@ -206,7 +214,7 @@ int spi_bitbang_setup(struct spi_device
+ 			return retval;
+ 	}
+ 
+-	dev_dbg(&spi->dev, "%s, %u nsec/bit\n", __func__, 2 * cs->nsecs);
++	printk("%s, %u nsec/bit ,clk %d\n", __func__, 2 * cs->nsecs, spi->max_speed_hz);
+ 
+ 	/* NOTE we _need_ to call chipselect() early, ideally with adapter
+ 	 * setup, unless the hardware defaults cooperate to avoid confusion

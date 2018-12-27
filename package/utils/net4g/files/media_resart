@@ -1,0 +1,7 @@
+#!/bin/sh
+
+pidof mediasvr && killall -INT mediasvr
+sleep 1
+pidof mediasvr && killall -9 mediasvr
+sleep 1
+/bin/mediasvr &

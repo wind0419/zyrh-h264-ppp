@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<root>
+    <Sys RegCode="626-250-929-268-380"/>
+    <DATABASE desc="BD">
+        <DBTYPE  value="3"/>
+        <DBNAME  value="glj"/>
+        <IPADDR  value="127.0.0.1"/>
+        <PORT  value="3306"/>
+        <USERNAME  value="hoshing"/>
+        <PASSWORD value="hoshingpwd"/>
+        <TNSSERVER  value="testtns"/>
+        <DATASOURCE  value="jczd_tlrh"/>
+		<LICENCE  value="693-340-965-650-140"/>
+    </DATABASE>
+   <SIP desc = "SIP消息配置信息">
+		<LOCALIP  value="192.168.1.1"/>
+		<LOCALPORT  value="5068"/>
+		<REMOTEIP value="117.27.141.6"/>
+		<REMOTEPORT  value="5061"/>
+		<PTGUID   value="1301101010010"/>
+		<USERNAME   value="admin"/>
+		<PASSWD   value="123456"/>
+		<FTPURL  value="ftp://58.22.127.27:2100"/>
+		<FTP_USERNAME  value="hoshing"/>
+		<FTP_PASSWD  value="hoshingpwd"/>
+		<PICPAHT    value="d://hskj//pic"/>
+		<POINT   NO="130917000101000000" name = "testNode"/>
+		<CHANNEL   NO="130917000103010001" name="TestIPC" PLAYURL ="rtsp://192.168.1.64/h264/ch1/sub/av_stream"  USERNAME="admin" PASSWD="zyrh12345" PASSTYPE ="1"/>
+   </SIP>
+</root>

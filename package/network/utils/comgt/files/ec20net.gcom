@@ -1,0 +1,21 @@
+opengt
+set com 115200n81
+set senddelay 0.05
+
+:start
+        waitquiet 1 0.2
+        send "AT+COPS=3,0^m"
+        get 2 "" $s
+        waitquiet 1 0.2
+        send "AT+COPS?^m"
+        get 2 "^m" $s
+        get 2 "\"" $s
+        get 2 "\"" $s
+        print $s,"\n"
+        goto continue
+:netnull
+        print "netstatus=NONE\n"
+        exit 0
+:continue
+        exit 0
+

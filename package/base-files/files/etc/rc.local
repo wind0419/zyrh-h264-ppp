@@ -1,0 +1,58 @@
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+logger "rc.local runing,Set Watchdog in net4g"
+
+echo none > /sys/class/leds/heart/trigger
+#off status led
+#echo 1 > /sys/class/leds/regstat/brightness
+
+#rmmod usbserial
+logger "Power ON 4G module"
+#echo 0 > /sys/class/leds/modpwr/brightness
+#sleep 5
+#insmod usbserial vendor=0x1c9e product=0x9b3c
+
+ls /dev/ttyUSB*
+echo -n > /tmp/3g-ret
+echo -n > /tmp/3g-info
+echo -n > /tmp/pub_info
+echo -n > /tmp/at_failed_ret
+echo -n > /tmp/module_status_file
+
+
+
+#off led gpio2
+#echo 1 >  /sys/class/leds/hame:red:gpiotwo/brightness
+echo 0 > /tmp/sig
+echo "Default" > /tmp/vcc
+echo "voltage:0" >> /tmp/vcc
+
+# set hostname static
+#uci set system.@system[0].hostname='OpenwrtByWind'
+#uci commit
+
+echo "Default" > /tmp/board_info
+echo "remote_ip=$(uci get -q netset.@netset[0].remote_ip)" >> /tmp/board_info
+echo "remote_port=$(uci get -q netset.@netset[0].remote_port)" >> /tmp/board_info
+echo "deviceid=$(uci get -q netset.@netset[0].deviceid)" >> /tmp/board_info
+echo "mac=$(cat /sys/class/net/eth0/address)" >> /tmp/board_info
+echo "version=$(cat /etc/Version)" >> /tmp/board_info
+echo "starttime=$(date "+%Y-%m-%d %H:%M:%S")" >> /tmp/board_info
+
+echo "Default" > /tmp/gps_info
+echo "speed=" >> /tmp/gps_info
+echo "gpsdir=" >> /tmp/gps_info
+echo "latitude=" >> /tmp/gps_info
+echo "longitude=" >> /tmp/gps_info
+echo "ns=" >> /tmp/gps_info
+echo "height=" >> /tmp/gps_info
+
+cp /tmp/gps_info /tmp/agps_info
+
+#for H264 mediaserver
+echo timer > /sys/class/leds/heart/trigger
+hwclock -s
+#for 7688 2p git-proj gpio version
+exit 0
+

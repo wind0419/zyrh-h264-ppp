@@ -1,0 +1,3 @@
+#!/bin/sh
+logger -t ntp-plug "ntp plug shell,$ACTION"
+/sbin/hwclock -w
