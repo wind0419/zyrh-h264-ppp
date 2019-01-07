@@ -48,7 +48,7 @@ endef
 
 # Uncomment portion below for Kamikaze and delete DESCRIPTION variable above
 define Package/net4g/description
-        communicate with remote server by tcp
+	communicate with remote server by tcp
 endef
 
 # Specify what needs to be done to prepare for building the package.
@@ -90,8 +90,6 @@ define Package/net4g/install
 	$(INSTALL_BIN) ./files/media_resart $(1)/sbin/
 	
 	$(INSTALL_DIR) $(1)/etc/
-	$(INSTALL_DATA) ./files/decode.lua $(1)/etc/decode.lua
-	$(INSTALL_DATA) ./files/flashops.lua $(1)/etc/flashops.lua
 	$(INSTALL_DATA) ./files/pdfconfig.xml $(1)/etc/pdfconfig.xml
 	
 	$(INSTALL_DIR) $(1)/etc/init.d
