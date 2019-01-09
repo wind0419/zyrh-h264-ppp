@@ -79,9 +79,6 @@ EOF
 		;;
 	wan) uci -q batch <<EOF
 set network.$1.proto='dhcp'
-set network.wwan='interface'
-set network.wwan.ifname='apcli0'
-set network.wwan.proto='dhcp'
 EOF
 		;;
 	esac

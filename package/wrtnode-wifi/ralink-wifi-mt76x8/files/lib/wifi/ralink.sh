@@ -646,11 +646,6 @@ config wifi-iface
 	option ssid     ZYRH4G_$(cat /sys/class/net/eth0/address|awk -F ":" '{print $5""$6 }'| tr a-z A-Z)
 	option encryption psk2
 	option key zyrh3gvs.net
-	option ApCliEnable '0'
-	option ApCliSsid 'aAP'
-	option ApCliAuthMode 'WPA2PSK'
-	option ApCliEncrypType 'AES'
-	option ApCliPassWord '87654321'
 EOF
 
 	done
