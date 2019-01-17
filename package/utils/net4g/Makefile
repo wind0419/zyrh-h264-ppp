@@ -78,7 +78,7 @@ endef
 # directory) to the install directory.
 define Package/net4g/install
 	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/net4g $(1)/bin/
+	#$(INSTALL_BIN) $(PKG_BUILD_DIR)/mediasvr $(1)/bin/
 	$(INSTALL_BIN) ./files/mediasvr $(1)/bin/
 	$(INSTALL_BIN) ./files/osip/bin/sip_reg $(1)/bin/
 
